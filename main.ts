@@ -12,6 +12,7 @@ interface AISite {
 
 interface AISearchSettings {
   sites: AISite[];
+  useInternalBrowser: boolean; // 使用 Obsidian 内部浏览器
 }
 
 const DEFAULT_SITES: AISite[] = [
@@ -24,7 +25,8 @@ const DEFAULT_SITES: AISite[] = [
 ];
 
 const DEFAULT_SETTINGS: AISearchSettings = {
-  sites: DEFAULT_SITES
+  sites: DEFAULT_SITES,
+  useInternalBrowser: false
 };
 
 export default class AISearchPlugin extends Plugin {
@@ -108,6 +110,16 @@ export default class AISearchPlugin extends Plugin {
     new AISearchModal(this.app, this.settings, this).open();
   }
 
+  openUrl(url: string, useInternal: boolean = false) {
+    if (useInternal) {
+      // 使用 Obsidian 内部浏览器
+      window.open(url, '_blank');
+    } else {
+      // 使用系统默认浏览器
+      this.openInSystemBrowser(url);
+    }
+  }
+
   openInSystemBrowser(url: string) {
     const currentPlatform = platform();
 
@@ -140,6 +152,7 @@ export default class AISearchPlugin extends Plugin {
     }
 
     const encodedQuery = encodeURIComponent(query);
+    const useInternal = this.settings.useInternalBrowser;
 
     enabledSites.forEach((site, index) => {
       // 延迟打开，避免浏览器阻止弹窗
@@ -149,7 +162,7 @@ export default class AISearchPlugin extends Plugin {
         if (isAppend && site.appendParam) {
           url += `&${site.appendParam}=${encodedQuery}`;
         }
-        this.openInSystemBrowser(url);
+        this.openUrl(url, useInternal);
       }, index * 300); // 每个链接间隔300ms
     });
 
@@ -314,9 +327,18 @@ class AISearchSettingTab extends PluginSettingTab {
 
     containerEl.createEl('h2', { text: 'AI Search 设置' });
 
-    containerEl.createEl('p', {
-      text: '配置要使用的AI搜索引擎。启用/禁用各个网站。'
-    });
+    // 浏览器选项
+    new Setting(containerEl)
+      .setName('使用 Obsidian 内部浏览器')
+      .setDesc('开启后在 Obsidian 内部打开链接，关闭则使用系统默认浏览器')
+      .addToggle(toggle => toggle
+        .setValue(this.plugin.settings.useInternalBrowser)
+        .onChange(async (value) => {
+          this.plugin.settings.useInternalBrowser = value;
+          await this.plugin.saveSettings();
+        }));
+
+    containerEl.createEl('h3', { text: 'AI 网站列表' });
 
     this.plugin.settings.sites.forEach((site, index) => {
       new Setting(containerEl)
