@@ -1,0 +1,9 @@
+{
+  "id": "ai-search",
+  "name": "AI Search",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "一键打开多个AI搜索引擎搜索同一个问题",
+  "author": "Your Name",
+  "isDesktopOnly": true
+}

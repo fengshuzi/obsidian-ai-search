@@ -1,0 +1,65 @@
+.ai-search-modal {
+  padding: 20px;
+}
+
+.ai-search-input-container {
+  margin-bottom: 15px;
+}
+
+.ai-search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.ai-search-append-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background: var(--background-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ai-search-append-container input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.ai-search-append-container label {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.ai-search-sites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ai-search-site {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--background-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ai-search-site input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.ai-search-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
