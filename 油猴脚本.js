@@ -18,6 +18,34 @@
 (function () {
     'use strict';
 
+    // ========== 提示词扩展映射表 ==========
+    // key: 匹配关键词（不区分大小写，支持部分匹配）
+    // value: 替换为完整提示词
+    const PROMPT_MAP = [
+        {
+            match: /claude\s*skill/i,
+            full: `从今天开始，作为我的 AI Skill 教练，每天分享 10 个可直接沉淀为 Cursor Rules / Claude Skills 的高价值工程化技巧。核心目标是优化我的提问方式，减少 AI 对复杂软件工程需求的误解。请结合我的程序员技术背景，围绕需求理解、上下文补全、架构约束、故障排查、输出格式控制等方向持续迭代。要求：\n- 基于历史内容增量升级\n- 避免重复\n- 按难度递进\n- 每条都包含可复用模板\n- 提供真实工程案例`
+        },
+        // 在此继续添加更多映射，例如：
+        // {
+        //     match: /每日英语/i,
+        //     full: `作为我的英语教练，每天提供 ...`
+        // },
+    ];
+
+    /**
+     * 如果 text 命中 PROMPT_MAP 中的某条规则，返回对应的完整提示词；否则原样返回。
+     */
+    function expandPrompt(text) {
+        for (const rule of PROMPT_MAP) {
+            if (rule.match.test(text)) {
+                console.log('[AI脚本] 命中提示词扩展规则:', rule.match);
+                return rule.full;
+            }
+        }
+        return text;
+    }
+
     const host = location.hostname;
 
     if (/kimi\.moonshot\.cn|www\.kimi\.com/.test(host)) {
@@ -35,7 +63,7 @@
     const runKey = "ai_auto_asked_" + location.pathname + "?" + prompt;
     if (sessionStorage.getItem(runKey)) return;
     sessionStorage.setItem(runKey, "1");
-    const text = decodeURIComponent(prompt);
+    const text = expandPrompt(decodeURIComponent(prompt));
 
     if (/grok\.com/.test(host)) {
         runGrok();
@@ -71,7 +99,7 @@
 
             clearInterval(interval);
 
-            const text = decodeURIComponent(query);
+            const text = expandPrompt(decodeURIComponent(query));
 
             // 填入内容（使用 Lexical 编辑器兼容方式）
             input.focus();
