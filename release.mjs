@@ -45,6 +45,7 @@ try {
   } else if (existsSync('styles.css')) {
     files.push('styles.css');
   }
+  if (existsSync('dist/assets/wechat-donate.jpg')) files.push('dist/assets/wechat-donate.jpg');
 
   console.log(`📦 将上传文件: ${files.join(', ')}\n`);
 
