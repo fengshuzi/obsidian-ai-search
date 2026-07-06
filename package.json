@@ -1,6 +1,6 @@
 {
   "name": "obsidian-ai-search",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "一键打开多个AI搜索引擎搜索同一个问题",
   "main": "main.js",
   "scripts": {
